@@ -1,0 +1,108 @@
+import java.util.ArrayList;
+import java.util.HashMap; 
+
+class Car {
+    private String licensePlate;
+    private String model;
+    private boolean isRented;
+
+    public Car(String licensePlate, String model) {
+        this.licensePlate = licensePlate;
+        this.model = model;
+        this.isRented = false;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public boolean isRented() {
+        return isRented;
+    }
+
+    public void rent() {
+        isRented = true;
+    }
+
+    public void returnCar() {
+        isRented = false;
+    }
+}
+
+class Customer {
+    private String name;
+    private String id;
+
+    public Customer(String name, String id) {
+        this.name = name;
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getId() {
+        return id;
+    }
+}
+
+class RentalAgency {
+    private ArrayList<Car> cars;
+    private HashMap<String, Customer> customers;
+
+    public RentalAgency() {
+        cars = new ArrayList<>();
+        customers = new HashMap<>();
+    }
+
+    public void addCar(Car car) {
+        cars.add(car);
+    }
+
+    public void registerCustomer(Customer customer) {
+        customers.put(customer.getId(), customer);
+    }
+
+    public String rentCar(String licensePlate, String customerId) {
+        for (Car car : cars) {
+            if (car.getLicensePlate().equals(licensePlate) && !car.isRented()) {
+                car.rent();
+                return "Car rented successfully to " + customers.get(customerId).getName();
+            }
+        }
+        return "Car not available or does not exist.";
+    }
+
+    public String returnCar(String licensePlate) {
+        for (Car car : cars) {
+            if (car.getLicensePlate().equals(licensePlate) && car.isRented()) {
+                car.returnCar();
+                return "Car returned successfully.";
+            }
+        }
+        return "Car not found or was not rented.";
+    }
+}
+
+public class CarRentalSystem {
+    public static void main(String[] args) {
+        RentalAgency rentalAgency = new RentalAgency();
+        
+        Customer customer1 = new Customer("Paul Kibor", "4200A");
+        rentalAgency.registerCustomer(customer1);
+
+        Car car1 = new Car("KDA 510S", "Toyota Premio");
+        rentalAgency.addCar(car1);
+
+        System.out.println(rentalAgency.rentCar("KDA 510S", "4200A")); 
+        System.out.println(rentalAgency.rentCar("KDA 510S", "4200A"));
+    
+        System.out.println(rentalAgency.returnCar("KDA 510S")); 
+        System.out.println(rentalAgency.returnCar("KDA 510S")); 
+    }
+}
